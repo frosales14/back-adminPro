@@ -9,12 +9,22 @@ const {
     getMedicos,
     crearMedicos,
     actualizarMedicos,
-    eliminarMedicos
+    eliminarMedicos,
+    getMedicoById
 } = require('../controllers/medicos');
 
 const router = Router();
 
 router.get('/', [], getMedicos);
+
+router.get('/:id', 
+    [
+        validarJwt,
+        check('id','El hospital es requerido').isMongoId(),
+        validarCampos
+    ], 
+    getMedicoById
+);
 
 router.post('/',
     [
@@ -39,8 +49,7 @@ router.put('/:id',
 router.delete('/:id', 
     [
         validarJwt,
-        check('nombre','El nombre es requerido').not().isEmpty(),
-        check('hospital','El hospital es requerido').isMongoId(),
+        check('id','El hospital es requerido').isMongoId(),
         validarCampos
     ], 
     eliminarMedicos
